@@ -52,8 +52,7 @@ function generateHeatMap(id, label, data, width)
                  .on('click', function() {
                     console.log(d3.select(this));
                  })
-                 .style('fill',function(d){return color(d.value);})
-                 .style("stroke", '#555');
+                 .style('fill',function(d){return color(d.value);});
 }
 
 ////////////////////////////////////////////////////////////////////////
