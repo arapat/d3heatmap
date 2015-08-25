@@ -1,18 +1,30 @@
-.cell:hover
+.hm-cell:hover
 {
   stroke: white;
   stroke-width: 1px;
 }
 
-div.tooltip
+div.hm-tooltip
 {
 	position: absolute;
 	text-align: left;
 	padding: 8px;
-	font: 12px sans-serif;
+	font: 14px sans-serif;
 	background: #000;
   color: #ddd;
 	border: solid 1px #aaa;
 	border-radius: 4px;
 	pointer-events: none;
+}
+
+.hm-label path,
+.hm-label line {
+    fill: none;
+    stroke-width: 0;
+    shape-rendering: crispEdges;
+}
+
+.hm-label text {
+    font-family: sans-serif;
+    font-size: 11px;
 }

@@ -1,9 +1,10 @@
 /**
-*   calendarWeekHour    Setup a week-hour grid:
-*                           7 Rows (days), 24 Columns (hours)
+*   generateHeatMap    Generate a heatmap grid
+*                           according to a given matrix
 *   @param id           div id tag starting with #
+*   @param label        the label of the data
+*   @param data         the input matrix
 *   @param width        width of the grid in pixels
-*   @param height       height of the grid in pixels
 */
 
 function colorFactory (range)
@@ -17,7 +18,7 @@ function generateHeatMap(id, label, data, width)
 {
     var calcData = processData(data, width);
     var color = colorFactory([0.0, 1.0]);
-    var tooltip = d3.select('body').select('div.tooltip');
+    var tooltip = d3.select('body').select('div.hm-tooltip');
     var pixelMouseover = function(d){
       tooltip.style("opacity", 0.8)
         .style("left", (d3.event.pageX + 15) + "px")
@@ -26,19 +27,19 @@ function generateHeatMap(id, label, data, width)
     };
 
     var grid = d3.select(id).append("svg")
-                    .attr("width", width)
-                    .attr("height", width)
-                    .attr("class", "chart");
+                 .attr("width", width)
+                 .attr("height", width)
+                 .attr("class", "hm-chart");
 
-    var row = grid.selectAll(".row")
+    var row = grid.selectAll(".hm-row")
                   .data(calcData)
                   .enter().append("svg:g")
-                  .attr("class", "row");
+                  .attr("class", "hm-row");
 
-    var col = row.selectAll(".cell")
+    var col = row.selectAll(".hm-cell")
                  .data(function (d) { return d; })
                  .enter().append("svg:rect")
-                 .attr("class", "cell")
+                 .attr("class", "hm-cell")
                  .attr("x", function(d) { return d.x; })
                  .attr("y", function(d) { return d.y; })
                  .attr("width", function(d) { return d.width; })
@@ -53,22 +54,32 @@ function generateHeatMap(id, label, data, width)
                     console.log(d3.select(this));
                  })
                  .style('fill',function(d){return color(d.value);});
+
+    // Code to add axises, might not be useful because matrix will be large,
+    // thus the gridWidth will be too small to see the label clearly.
+    /*
+    var gridWidth = calcData[0][0].width;
+    var scale = d3.scale.linear()
+                  .domain([0, label.length-1]).range([gridWidth / 2.0, width - gridWidth / 2.0]);
+    var axis = d3.svg.axis().scale(scale)
+                  .ticks(label.length)
+                  .tickFormat(function (d,i) {
+                    return label[d];
+                  });
+    var yAxis = d3.svg.axis().scale(scale).orient("right");
+    grid.append("svg:g")
+        .attr("class", "hm-label")
+        .attr("transform", "translate(0, "+(gridWidth / 2.0)+")")
+        .call(axis.orient("top"))
+    grid.append("svg:g")
+        .attr("class", "hm-label")
+        .attr("transform", "translate(" + (gridWidth) + ", 0)")
+        .call(axis.orient("left"));
+    */
 }
 
 ////////////////////////////////////////////////////////////////////////
 
-/**
-*   randomData()        returns an array: [
-                                            [{id:value, ...}],
-                                            [{id:value, ...}],
-                                            [...],...,
-                                            ];
-                        ~ [
-                            [hour1, hour2, hour3, ...],
-                            [hour1, hour2, hour3, ...]
-                          ]
-
-*/
 function processData(matrix, gridWidth)
 {
     var dataCount = matrix.length;
