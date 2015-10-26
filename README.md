@@ -1,4 +1,4 @@
-Generate a heat map for exploring correlation between data points.
+Generate a heat map for exploring correlations between data points.
 
 ![Screenshot](https://raw.githubusercontent.com/arapat/d3heatmap/master/screenshot.png)
 
